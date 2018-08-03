@@ -1,0 +1,157 @@
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link href="../static/css/style.css" type=text/css rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="navigation pull-right" style="margin-top:20px">
+			<ul class="nav nav-pills">
+				<li class="btn btn-outline-primary btn-flat active" id="home"><a href="#Home">Home</a></li>
+				<li role="presentation" class="dropdown">
+					<a class="dropdown-toggle btn btn-outline-primary btn-flat" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						{{user}} <span class="caret"></span>
+    				</a>
+				    <ul class="dropdown-menu" id="user_menu">
+						<li> <a href="#Profile">Profile</a></li>
+						<li><a href="logout">Sign Out</a></li>
+				    </ul>
+				</li>
+			</ul>
+			<br clear="all">&nbsp;
+		</div>
+		<div><br clear="all">&nbsp;</div>
+		<div class="jumbotron text-center">
+		<h2>IOTA User Dashboard</h2>
+			<div id="linked-dev-table" class="panel panel-info">
+			<!-- Default panel contents -->
+				<div class="panel-heading" style="font-size: large">Linked Devices</div>
+				  <!-- Table -->
+				  <table class="table" id="sysinfo-table">
+				    ...
+				  </table>
+			</div>
+			<div id="profile-table" class="panel panel-info">
+			<!-- Default panel contents -->
+				<div class="panel-heading" style="font-size: large">User Profile</div>
+				  <!-- Table -->
+				  <table class="table">
+					  <tr>
+						  <td>Username</td>
+						  <td id="td_user">{{user}}</td>
+					  </tr>
+					  <tr>
+						  <td>User Secret</td>
+						  <td id="td_secret">{{secret}}</td>
+					  </tr>
+					  <tr>
+						  <td>Password</td>
+						  <td>
+							  <table class="table">
+								  <tr>
+									  <td>Current</td>
+									  <td><input type="password" class="form-control" name="password_cur" placeholder="password" aria-describedby="sizing-addon1" required></td>
+								  </tr>
+								  <tr>
+									  <td>New</td>
+									  <td><input type="password" class="form-control" name="password_new" placeholder="password" aria-describedby="sizing-addon1" required></td>
+								  </tr>
+								  <tr>
+									  <td>Re-enter</td>
+									  <td><input type="password" class="form-control" name="password_new1" placeholder="password" aria-describedby="sizing-addon1" required></td>
+								  </tr>
+								  <tr>
+									  <td></td>
+									  <td><button class="btn btn-outline-primary btn-flat" id="update_passwd" href="#Update">Update</button></td>
+								  </tr>
+							  </table>
+					  	</td>
+					  </tr>
+				  </table>
+			</div>
+			<div class="alert"></div>
+	</div>
+	<script>
+		$(function(){
+			$('#profile-table').hide();
+			$('.alert').hide();
+			var posting = $.post('/api/sys/info');
+			posting.done(function( data ) {
+				resp = JSON.parse(data);
+				$('#sysinfo-table').append('<tr><td>Hostname :' + resp['Hostname']);
+				$('#sysinfo-table').append('<tr><td>OS :' + resp['OS']);
+				$('#sysinfo-table').append('<tr><td>CPU :' + resp['CPU']);
+				$('#sysinfo-table').append('<tr><td>Uptime :' + resp['Uptime']);
+			});
+		});
+
+		$("#user_menu li").click(function() {
+			var pill = $(this).find("a").attr("href");
+			if (typeof(pill) != undefined) {
+				if (pill == "#Profile") {
+					$('#linked-dev-table').hide();
+					$('#profile-table').show();
+					$("#home").removeClass('active');
+				}
+			}
+		});
+
+		$("#home").click(function() {
+			$("#home").addClass('active');
+			$('#linked-dev-table').show();
+			$('#profile-table').hide();
+			$('.alert').hide();
+		});
+
+		$("#update_passwd").click(function() {
+			var old_passwd=$(document).find( "input[name='password_cur']" ).val();
+			var new_passwd=$(document).find( "input[name='password_new']" ).val();
+			var new_passwd1=$(document).find( "input[name='password_new1']" ).val();
+			var user=$('#td_user').html();
+			var secret=$('#td_secret').html();
+
+			if (new_passwd != new_passwd1) {
+				$('.alert').html("Passwords dont match; please re-enter!");
+				$('.alert').removeClass('alert-danger');
+				$('.alert').removeClass('alert-success');
+				$('.alert').addClass('alert-warning');
+				$('.alert').show();
+				return;
+			}
+
+			// Send the data using post
+			var posting = $.post( '/api/admin/update',
+									JSON.stringify({user: user,
+													password: old_passwd,
+													new_password: new_passwd,
+													secret: secret}) );
+
+			// Put the results in a div
+			posting.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Result'] == 'Success') {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+			});
+		});
+	</script>
+</body>
+</html>

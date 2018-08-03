@@ -1,0 +1,76 @@
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<script src="../static/js/jquery-3.3.1.min.js"></script>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="../static/js/bootstrap.min.js"></script>
+
+	<link href="../static/css/style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container pt-3" style="margin-top: 70px;">
+		<div class="row justify-content-sm-center">
+			<div class="col-md-5">
+				<div class="card border-info text-center">
+					<div class="card-header">
+					InstaNAS
+					</div>
+					<div class="card-body">
+						<form id="login_form" method="post">
+						{% module xsrf_form_html() %}
+							<input type="text" class="form-control mb-2" name="user" placeholder="Username" required autofocus id="user">
+							<input type="password" class="form-control mb-2" name="password" placeholder="Password" required id="password">
+							<button class="btn btn-lg btn-primary btn-block mb-1" type="submit">Sign in</button>
+							<a href="#" class="float-right">Need help?</a>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-center" style="margin-top: 3%;">
+			<div class="alert"></div>
+		</div>
+	</div>
+	<script>
+		$(function(){
+			$('.alert').hide();
+		});
+
+		$("#login_form").submit(function(e){
+			e.preventDefault();
+			console.log('login form submit');
+			// Get some values from elements on the page:
+			var $form = $( this ),
+			user = $form.find( "input[name='user']" ).val(),
+			passwd = $form.find( "input[name='password']" ).val(),
+			url = $form.attr( "action" );
+
+			// Send the data using post
+			var p0 = $.post( '/api/admin/auth/password', JSON.stringify({ user: user, password: passwd }) );
+
+			// Put the results in a div
+			p0.done(function( data ) {
+				resp = JSON.parse(data);
+				console.log("data: " + resp['Result']);
+				if (resp['Result'] == 'Success') {
+						var p1 = $.post( '/authdone', { user: user, token: resp['AuthToken'] } );
+						p1.done(function( data ) {
+							window.location.href = "/dashboard";
+						});
+				}
+				else {
+					var alert = "<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> " +
+									resp['Status'];
+					$('.alert').html(alert);
+					$('.alert').removeClass('alert-warning');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-danger');
+				}
+				$('.alert').show();
+			});
+		});
+	</script>
+</body>
+</html>
