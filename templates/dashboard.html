@@ -38,13 +38,6 @@
 			<!-- Table -->
 			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Users</th></thead></table>
 			<table class="table table-striped" id="users-table">
-				<thead class="thead-dark">
-					<tr>
-						<th>Name</th>
-						<th>Home</th>
-						<th>Groups</th>
-					</tr>
-				</thead>
 			</table>
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addUserModal">
@@ -54,20 +47,14 @@
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteUserModal">
 			<svg height="32" class="octicon octicon-dash" viewBox="0 0 8 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M0 7v2h8V7H0z"></path></svg>
 			</button>
+			<button type="button" class="btn btn-light" data-toggle="modal" id="refreshUserList">
+			<svg height="32" class="octicon octicon-sync" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M10.24 7.4a4.15 4.15 0 0 1-1.2 3.6 4.346 4.346 0 0 1-5.41.54L4.8 10.4.5 9.8l.6 4.2 1.31-1.26c2.36 1.74 5.7 1.57 7.84-.54a5.876 5.876 0 0 0 1.74-4.46l-1.75-.34zM2.96 5a4.346 4.346 0 0 1 5.41-.54L7.2 5.6l4.3.6-.6-4.2-1.31 1.26c-2.36-1.74-5.7-1.57-7.85.54C.5 5.03-.06 6.65.01 8.26l1.75.35A4.17 4.17 0 0 1 2.96 5z"></path></svg>
+			</button>
 		</div>
 		<div id="share-list-table">
 			<!-- Table -->
 			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Shares</th></thead></table>
 			<table class="table table-striped" id="shares-table">
-				<thead class="thead-dark">
-					<tr style="background-color: lightgrey;">
-						<th>Name</th>
-						<th>Description</th>
-						<th>Path</th>
-						<th>Guest OK</th>
-						<th>ACL</th>
-					</tr>
-				</thead>
 			</table>
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addShareModal">
@@ -76,6 +63,9 @@
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteShareModal">
 			<svg height="32" class="octicon octicon-dash" viewBox="0 0 8 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M0 7v2h8V7H0z"></path></svg>
+			</button>
+			<button type="button" class="btn btn-light" data-toggle="modal" id="refreshShareList">
+			<svg height="32" class="octicon octicon-sync" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M10.24 7.4a4.15 4.15 0 0 1-1.2 3.6 4.346 4.346 0 0 1-5.41.54L4.8 10.4.5 9.8l.6 4.2 1.31-1.26c2.36 1.74 5.7 1.57 7.84-.54a5.876 5.876 0 0 0 1.74-4.46l-1.75-.34zM2.96 5a4.346 4.346 0 0 1 5.41-.54L7.2 5.6l4.3.6-.6-4.2-1.31 1.26c-2.36-1.74-5.7-1.57-7.85.54C.5 5.03-.06 6.65.01 8.26l1.75.35A4.17 4.17 0 0 1 2.96 5z"></path></svg>
 			</button>
 		</div>
 		<div id="profile-table">
@@ -197,20 +187,9 @@
 	  </div>
 	</div>
 	<script>
-	$(function(){
-		$('#user-list-table').hide();
-		$('#share-list-table').hide();
-		$('#profile-table').hide();
-		$('.alert').hide();
-		var p = $.post('/api/sys/info');
-		p.done(function( data ) {
-			resp = JSON.parse(data);
-			$('#sysinfo-table').append('<tbody><tr><th scope="row" style="text-align: center; width: 40%;">Hostname</th><td>' + resp['Hostname'] + "</td></tr>");
-			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">OS</th><td>' + resp['OS'] + "</td></tr>");
-			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">CPU</th><td>' + resp['CPU'] + "</td></tr>");
-			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">Uptime</th><td>' + resp['Uptime'] + "</td></tr></tbody>");
-			$('#hostNameInput').val(resp['Hostname']);
-		});
+	function refresh_user_list(){
+		$('#users-table').html("<thead class='thead-dark'><tr><th>Name</th><th>Home</th><th>Groups</th></tr></thead>");
+		$('#deleteUserSelect').html('<option selected>Select user...</option>');
 		var p1 = $.post('/api/user/list');
 		p1.done(function( data ) {
 			resp = JSON.parse(data);
@@ -225,8 +204,12 @@
 			});
 			$('#users-table').append("</tbody>");
 		});
+	}
 
+	function refresh_share_list(){
 		var p2 = $.post('/api/share/list');
+		$('#shares-table').html("<thead class='thead-dark'><tr style='background-color: lightgrey;'><th>Name</th><th>Description</th><th>Path</th><th>Guest OK</th><th>ACL</th></tr></thead>");
+		$('#deleteShareSelect').html('<option selected>Select share...</option>');
 		p2.done(function( data ) {
 			resp = JSON.parse(data);
 			$('#shares-table').append("<tbody>");
@@ -239,9 +222,37 @@
 			$('#shares-table').append("</tbody>");
 			//console.log(resp);
 		});
+	}
+
+	$(function(){
+		$('#user-list-table').hide();
+		$('#share-list-table').hide();
+		$('#profile-table').hide();
+		$('.alert').hide();
+
+		var p = $.post('/api/sys/info');
+		p.done(function( data ) {
+			resp = JSON.parse(data);
+			$('#sysinfo-table').append('<tbody><tr><th scope="row" style="text-align: center; width: 40%;">Hostname</th><td>' + resp['Hostname'] + "</td></tr>");
+			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">OS</th><td>' + resp['OS'] + "</td></tr>");
+			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">CPU</th><td>' + resp['CPU'] + "</td></tr>");
+			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">Uptime</th><td>' + resp['Uptime'] + "</td></tr></tbody>");
+			$('#hostNameInput').val(resp['Hostname']);
+		});
+
+		refresh_user_list();
+		refresh_share_list();
 
 		$('#homeInput').focus(function(){
 			$('#homeInput').val("/home/"+$('#userInput').val());
+		});
+
+		$('#refreshUserList').click(function(){
+			refresh_user_list();
+		});
+
+		$('#refreshShareList').click(function(){
+			refresh_share_list();
 		});
 
 		$("#home-btn").click(function() {
@@ -290,6 +301,7 @@
 					$('.alert').removeClass('alert-warning');
 					$('.alert').addClass('alert-success');
 					$('.alert').show();
+					refresh_user_list();
 				}
 				else{
 					$('.alert').removeClass('alert-danger');
@@ -311,7 +323,31 @@
 		});
 
 		$('#deleteUserBtn').click(function(){
-			console.log($('#deleteUserSelect').val());
+			var name = $('#deleteUserSelect').val();
+
+			if (name == "")
+				return;
+
+			var p_del_user = $.post( '/api/user/delete', JSON.stringify({ user: name }) );
+			p_del_user.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+					refresh_user_list();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+				$('#deleteUserSelect').val("Select user...")
+				$('#deleteUserModal').modal('hide');
+			});
 		});
 
 		$('#dontDelUserBtn').click(function(){
@@ -319,8 +355,31 @@
 		});
 
 		$('#deleteShareBtn').click(function(){
-			console.log($('#deleteShareSelect').val());
-			$('#deleteShareModal').modal('hide');
+			var name = $('#deleteShareSelect').val();
+
+			if (name == "")
+				return;
+
+			var p_del_user = $.post( '/api/share/delete', JSON.stringify({ name: name }) );
+			p_del_user.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+					refresh_share_list();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+				$('#deleteShareSelect').val("Select share...")
+				$('#deleteShareModal').modal('hide');
+			});
 		});
 
 		$('#dontDelShareBtn').click(function(){

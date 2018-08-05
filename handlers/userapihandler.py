@@ -48,11 +48,11 @@ class UserApiHandler(BaseHandler):
                 status = "Success: User '{0}' deleted".format(user)
             else:
                 status = "Error: User '{0}' delete failed!".format(user)
-                resp = json.dumps({
-                    "Status": status,
-                })
-                print(resp)
-                self.write(resp)
+        resp = json.dumps({
+            "Status": status,
+        })
+        print(resp)
+        self.write(resp)
 
     def update(self, route):
         d = json.loads(self.request.body)
