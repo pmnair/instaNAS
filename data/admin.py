@@ -61,5 +61,3 @@ class Admin(object):
             self.db.update({'user': name}, user)
         else:
             raise Exception("Password incorrect for '%s'!" % name)
-
-

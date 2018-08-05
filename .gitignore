@@ -1,0 +1,3 @@
+*.pyc
+instaNAS.egg-info
+dist

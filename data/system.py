@@ -26,6 +26,7 @@ class System(object):
 
     def os_info(s):
         return s.os + " " + s.distro + " Kernel:" + s.kversion
+
     def uptime(s):
         r=subprocess.check_output(["/usr/bin/uptime", "-p"], stderr=subprocess.STDOUT, shell=False)
         return r.strip('\n')

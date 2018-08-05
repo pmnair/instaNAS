@@ -1,114 +1,297 @@
 <html>
 <head>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<script src="../static/js/jquery-3.3.1.min.js"></script>
 
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	<link href="../static/css/style.css" type=text/css rel="stylesheet" />
+	<script src="../static/js/bootstrap.min.js"></script>
+
+	<link href="../static/css/style.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-	<div class="container">
-		<div class="navigation pull-right" style="margin-top:20px">
-			<ul class="nav nav-pills">
-				<li class="btn btn-outline-primary btn-flat active" id="home"><a href="#Home">Home</a></li>
-				<li role="presentation" class="dropdown">
-					<a class="dropdown-toggle btn btn-outline-primary btn-flat" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						{{user}} <span class="caret"></span>
-    				</a>
-				    <ul class="dropdown-menu" id="user_menu">
-						<li> <a href="#Profile">Profile</a></li>
-						<li><a href="logout">Sign Out</a></li>
-				    </ul>
-				</li>
-			</ul>
-			<br clear="all">&nbsp;
+	<div class="pos-f-t">
+		<div class="collapse" id="navbarToggleExternalContent">
+			<div class="bg-dark p-4">
+				<h4 class="text-white">Menu</h4>
+				<button type="button" class="btn btn-info" id="home-btn">Home</button>
+				<button type="button" class="btn btn-info" id="users-btn">Users</button>
+				<button type="button" class="btn btn-info" id="shares-btn">Shares</button>
+				<button type="button" class="btn btn-info" id="profile-btn">Profile</button>
+				<a class="btn btn-info" href="logout" role="button">Sign Out</a>
+			</div>
 		</div>
-		<div><br clear="all">&nbsp;</div>
-		<div class="jumbotron text-center">
-		<h2>IOTA User Dashboard</h2>
-			<div id="linked-dev-table" class="panel panel-info">
-			<!-- Default panel contents -->
-				<div class="panel-heading" style="font-size: large">Linked Devices</div>
-				  <!-- Table -->
-				  <table class="table" id="sysinfo-table">
-				    ...
-				  </table>
-			</div>
-			<div id="profile-table" class="panel panel-info">
-			<!-- Default panel contents -->
-				<div class="panel-heading" style="font-size: large">User Profile</div>
-				  <!-- Table -->
-				  <table class="table">
-					  <tr>
-						  <td>Username</td>
-						  <td id="td_user">{{user}}</td>
-					  </tr>
-					  <tr>
-						  <td>User Secret</td>
-						  <td id="td_secret">{{secret}}</td>
-					  </tr>
-					  <tr>
-						  <td>Password</td>
-						  <td>
-							  <table class="table">
-								  <tr>
-									  <td>Current</td>
-									  <td><input type="password" class="form-control" name="password_cur" placeholder="password" aria-describedby="sizing-addon1" required></td>
-								  </tr>
-								  <tr>
-									  <td>New</td>
-									  <td><input type="password" class="form-control" name="password_new" placeholder="password" aria-describedby="sizing-addon1" required></td>
-								  </tr>
-								  <tr>
-									  <td>Re-enter</td>
-									  <td><input type="password" class="form-control" name="password_new1" placeholder="password" aria-describedby="sizing-addon1" required></td>
-								  </tr>
-								  <tr>
-									  <td></td>
-									  <td><button class="btn btn-outline-primary btn-flat" id="update_passwd" href="#Update">Update</button></td>
-								  </tr>
-							  </table>
-					  	</td>
-					  </tr>
-				  </table>
-			</div>
-			<div class="alert"></div>
+		<nav class="navbar navbar-dark bg-dark">
+			<span class="navbar-brand mb-0 h2" style="margin-left: 40%;">Insta-NAS</span>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</nav>
+	</div>
+	<div >
+		<div id="system-info-table">
+			<!-- Table -->
+			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">System Information</th></thead></table>
+			<table class="table table-striped" id="sysinfo-table"></table>
+		</div>
+		<div id="user-list-table">
+			<!-- Table -->
+			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Users</th></thead></table>
+			<table class="table table-striped" id="users-table">
+				<thead class="thead-dark">
+					<tr>
+						<th>Name</th>
+						<th>Home</th>
+						<th>Groups</th>
+					</tr>
+				</thead>
+			</table>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addUserModal">
+			<svg height="32" class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path></svg>
+			</button>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteUserModal">
+			<svg height="32" class="octicon octicon-dash" viewBox="0 0 8 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M0 7v2h8V7H0z"></path></svg>
+			</button>
+		</div>
+		<div id="share-list-table">
+			<!-- Table -->
+			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Shares</th></thead></table>
+			<table class="table table-striped" id="shares-table">
+				<thead class="thead-dark">
+					<tr style="background-color: lightgrey;">
+						<th>Name</th>
+						<th>Description</th>
+						<th>Path</th>
+						<th>Guest OK</th>
+						<th>ACL</th>
+					</tr>
+				</thead>
+			</table>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addShareModal">
+			<svg height="32" class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path></svg>
+			</button>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteShareModal">
+			<svg height="32" class="octicon octicon-dash" viewBox="0 0 8 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M0 7v2h8V7H0z"></path></svg>
+			</button>
+		</div>
+		<div id="profile-table">
+			<!-- Table -->
+			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Admin Profile</th></thead></table>
+			<table class="table">
+				<tr>
+					<td>Username</td>
+					<td id="td_user">{{user}}</td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td>
+						<table class="table">
+							<tr>
+								<td>Current</td>
+								<td><input type="password" class="form-control" name="password_cur" placeholder="password" aria-describedby="sizing-addon1" required></td>
+							</tr>
+							<tr>
+								<td>New</td>
+								<td><input type="password" class="form-control" name="password_new" placeholder="password" aria-describedby="sizing-addon1" required></td>
+							</tr>
+							<tr>
+								<td>Re-enter</td>
+								<td><input type="password" class="form-control" name="password_new1" placeholder="password" aria-describedby="sizing-addon1" required></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><button class="btn btn-success" id="update_passwd" href="#Update">Update</button></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr style="visibility: hidden;">
+					<td>User Secret</td>
+					<td id="td_secret">{{secret}}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="alert"></div>
+	</div>
+
+	<!-- Add User Modal -->
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+			  <input type="text" class="form-control mb-2" name="user" placeholder="Username" required autofocus id="userInput">
+			  <input type="password" class="form-control mb-2" name="password" placeholder="Password" required id="passwdInput">
+			  <input type="text" class="form-control mb-2" name="home" placeholder="/home/<username>" required autofocus id="homeInput">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontAddUserBtn">Dismiss</button>
+	        <button type="button" class="btn btn-primary" id="addUserBtn">Add</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Delete User Modal -->
+	<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+		<select class="custom-select" id="deleteUserSelect">
+			<option selected>Select user...</option>
+		</select>
+		  </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontDelUserBtn">Dismiss</button>
+	        <button type="button" class="btn btn-primary" id="deleteUserBtn">Delete</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Delete Share Modal -->
+	<div class="modal fade" id="deleteShareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="deleteModalLabel">Delete Share</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+		<select class="custom-select" id="deleteShareSelect">
+			<option selected>Select share...</option>
+		</select>
+		  </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontDelShareBtn">Dismiss</button>
+	        <button type="button" class="btn btn-primary" id="deleteShareBtn">Delete</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	<script>
-		$(function(){
-			$('#profile-table').hide();
-			$('.alert').hide();
-			var posting = $.post('/api/sys/info');
-			posting.done(function( data ) {
-				resp = JSON.parse(data);
-				$('#sysinfo-table').append('<tr><td>Hostname :' + resp['Hostname']);
-				$('#sysinfo-table').append('<tr><td>OS :' + resp['OS']);
-				$('#sysinfo-table').append('<tr><td>CPU :' + resp['CPU']);
-				$('#sysinfo-table').append('<tr><td>Uptime :' + resp['Uptime']);
+	$(function(){
+		$('#user-list-table').hide();
+		$('#share-list-table').hide();
+		$('#profile-table').hide();
+		$('.alert').hide();
+		var p = $.post('/api/sys/info');
+		p.done(function( data ) {
+			resp = JSON.parse(data);
+			$('#sysinfo-table').append('<tbody><tr><th scope="row" style="text-align: center; width: 40%;">Hostname</th><td>' + resp['Hostname'] + "</td></tr>");
+			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">OS</th><td>' + resp['OS'] + "</td></tr>");
+			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">CPU</th><td>' + resp['CPU'] + "</td></tr>");
+			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">Uptime</th><td>' + resp['Uptime'] + "</td></tr></tbody>");
+		});
+		var p1 = $.post('/api/user/list');
+		p1.done(function( data ) {
+			resp = JSON.parse(data);
+			$('#users-table').append("<tbody>");
+			resp['Users'].forEach(function(user) {
+				var info = "<tr><td style='width: 33.33%;'>" + user['Name'] +
+				"</td><td style='width: 33.33%;'>" + user['Home'] +
+				"</td><td style='width: 33.33%;'>" +  user['Groups']+ "</td></tr>";
+				$('#users-table').append(info);
+				$('#deleteUserSelect').append('<option value="'+user['Name']+'">'+user['Name']+'</option>');
+				//console.log(user);
 			});
+			$('#users-table').append("</tbody>");
 		});
 
-		$("#user_menu li").click(function() {
-			var pill = $(this).find("a").attr("href");
-			if (typeof(pill) != undefined) {
-				if (pill == "#Profile") {
-					$('#linked-dev-table').hide();
-					$('#profile-table').show();
-					$("#home").removeClass('active');
-				}
-			}
+		var p2 = $.post('/api/share/list');
+		p2.done(function( data ) {
+			resp = JSON.parse(data);
+			$('#shares-table').append("<tbody>");
+			resp['Shares'].forEach(function(share) {
+				var info = "<tr><td>" + share['Name'] + "</td><td>" + share['Comment'] + "</td><td>" +
+				share['Path'] + "</td><td>" + share['Guest_Ok'] + "</td><td>" + share['Usershare_Acl'] + "</td></tr>";
+				$('#shares-table').append(info);
+				$('#deleteShareSelect').append('<option value="'+share['Name']+'">'+share['Name']+'</option>');
+			});
+			$('#shares-table').append("</tbody>");
+			//console.log(resp);
 		});
 
-		$("#home").click(function() {
-			$("#home").addClass('active');
-			$('#linked-dev-table').show();
+		$('#homeInput').focus(function(){
+			$('#homeInput').val("/home/"+$('#userInput').val());
+		});
+
+		$("#home-btn").click(function() {
+			$('#system-info-table').show();
+			$('#user-list-table').hide();
+			$('#share-list-table').hide();
 			$('#profile-table').hide();
-			$('.alert').hide();
+		});
+
+		$("#users-btn").click(function() {
+			$('#system-info-table').hide();
+			$('#user-list-table').show();
+			$('#share-list-table').hide();
+			$('#profile-table').hide();
+		});
+
+		$("#shares-btn").click(function() {
+			$('#system-info-table').hide();
+			$('#user-list-table').hide();
+			$('#share-list-table').show();
+			$('#profile-table').hide();
+		});
+
+		$("#profile-btn").click(function() {
+			$('#system-info-table').hide();
+			$('#user-list-table').hide();
+			$('#share-list-table').hide();
+			$('#profile-table').show();
+		});
+
+		$('#addUserBtn').click(function(){
+			console.log($('#userInput').val());
+			console.log($('#passwdInput').val());
+			console.log($('#homeInput').val());
+			$('#userInput').val('');
+			$('#passwdInput').val('');
+			$('#homeInput').val('');
+		});
+
+		$('#dontAddUserBtn').click(function(){
+			$('#userInput').val('');
+			$('#passwdInput').val('');
+			$('#homeInput').val('');
+		});
+
+		$('#deleteUserBtn').click(function(){
+			console.log($('#deleteUserSelect').val());
+			$('#deleteUserModal').modal('hide');
+		});
+
+		$('#dontDelUserBtn').click(function(){
+			$('#deleteUserSelect').val("Select user...")
+		});
+
+		$('#deleteShareBtn').click(function(){
+			console.log($('#deleteShareSelect').val());
+			$('#deleteShareModal').modal('hide');
+		});
+
+		$('#dontDelShareBtn').click(function(){
+			$('#deleteShareSelect').val("Select share...")
 		});
 
 		$("#update_passwd").click(function() {
@@ -129,27 +312,28 @@
 
 			// Send the data using post
 			var posting = $.post( '/api/admin/update',
-									JSON.stringify({user: user,
-													password: old_passwd,
-													new_password: new_passwd,
-													secret: secret}) );
+			JSON.stringify({user: user,
+				password: old_passwd,
+				new_password: new_passwd,
+				secret: secret}) );
 
-			// Put the results in a div
-			posting.done(function( data ) {
-				resp = JSON.parse(data);
-				$('.alert').html(resp['Status']);
-				if (resp['Result'] == 'Success') {
-					$('.alert').removeClass('alert-danger');
-					$('.alert').removeClass('alert-warning');
-					$('.alert').addClass('alert-success');
-					$('.alert').show();
-				}
-				else{
-					$('.alert').removeClass('alert-danger');
-					$('.alert').removeClass('alert-success');
-					$('.alert').addClass('alert-warning');
-					$('.alert').show();
-				}
+				// Put the results in a div
+				posting.done(function( data ) {
+					resp = JSON.parse(data);
+					$('.alert').html(resp['Status']);
+					if (resp['Result'] == 'Success') {
+						$('.alert').removeClass('alert-danger');
+						$('.alert').removeClass('alert-warning');
+						$('.alert').addClass('alert-success');
+						$('.alert').show();
+					}
+					else{
+						$('.alert').removeClass('alert-danger');
+						$('.alert').removeClass('alert-success');
+						$('.alert').addClass('alert-warning');
+						$('.alert').show();
+					}
+				});
 			});
 		});
 	</script>
