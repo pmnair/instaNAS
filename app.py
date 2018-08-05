@@ -15,11 +15,13 @@ from handlers.adminapihandler import *
 from handlers.sysapihandler import *
 from handlers.userapihandler import *
 from handlers.shareapihandler import *
+from handlers.mountapihandler import *
 
 from data.admin import *
 from data.system import *
 from data.user import *
 from data.share import *
+from data.mount import *
 
 SERVER_IP='0.0.0.0'
 SERVER_PORT=8080
@@ -28,6 +30,7 @@ MONGO_URL='mongodb://localhost:27017/'
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
+            (r'/api/mount/(.*)', MountApiHandler),
             (r'/api/share/(.*)', ShareApiHandler),
             (r'/api/sys/(.*)', SysApiHandler),
             (r'/api/user/(.*)', UserApiHandler),
@@ -49,6 +52,7 @@ class Application(tornado.web.Application):
         self.sys = System()
         self.user = User()
         self.share = Share()
+        self.mount = Mount()
 
 if __name__ == "__main__":
     server = tornado.httpserver.HTTPServer(Application())

@@ -31,7 +31,8 @@ class ShareApiHandler(BaseHandler):
         user = d['user']
         rd = d['read']
         wr = d['write']
-        if self.application.share.add(name, path, user, rd=rd, wr=wr):
+        guest = d['guest']
+        if self.application.share.add(name, path, user, rd=rd, wr=wr, guest=guest):
             status = "Success: share '{0}' added".format(name)
         else:
             status = "Error: share '{0}' add failed!".format(name)

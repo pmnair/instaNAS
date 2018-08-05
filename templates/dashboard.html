@@ -34,7 +34,7 @@
 			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">System Information</th></thead></table>
 			<table class="table table-striped" id="sysinfo-table"></table>
 		</div>
-		<div id="user-list-table">
+		<div id="user-list-table" style="display: none;">
 			<!-- Table -->
 			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Users</th></thead></table>
 			<table class="table table-striped" id="users-table">
@@ -51,7 +51,7 @@
 			<svg height="32" class="octicon octicon-sync" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M10.24 7.4a4.15 4.15 0 0 1-1.2 3.6 4.346 4.346 0 0 1-5.41.54L4.8 10.4.5 9.8l.6 4.2 1.31-1.26c2.36 1.74 5.7 1.57 7.84-.54a5.876 5.876 0 0 0 1.74-4.46l-1.75-.34zM2.96 5a4.346 4.346 0 0 1 5.41-.54L7.2 5.6l4.3.6-.6-4.2-1.31 1.26c-2.36-1.74-5.7-1.57-7.85.54C.5 5.03-.06 6.65.01 8.26l1.75.35A4.17 4.17 0 0 1 2.96 5z"></path></svg>
 			</button>
 		</div>
-		<div id="share-list-table">
+		<div id="share-list-table" style="display: none;">
 			<!-- Table -->
 			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Shares</th></thead></table>
 			<table class="table table-striped" id="shares-table">
@@ -68,7 +68,7 @@
 			<svg height="32" class="octicon octicon-sync" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M10.24 7.4a4.15 4.15 0 0 1-1.2 3.6 4.346 4.346 0 0 1-5.41.54L4.8 10.4.5 9.8l.6 4.2 1.31-1.26c2.36 1.74 5.7 1.57 7.84-.54a5.876 5.876 0 0 0 1.74-4.46l-1.75-.34zM2.96 5a4.346 4.346 0 0 1 5.41-.54L7.2 5.6l4.3.6-.6-4.2-1.31 1.26c-2.36-1.74-5.7-1.57-7.85.54C.5 5.03-.06 6.65.01 8.26l1.75.35A4.17 4.17 0 0 1 2.96 5z"></path></svg>
 			</button>
 		</div>
-		<div id="profile-table">
+		<div id="profile-table" style="display: none;">
 			<!-- Table -->
 			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Admin Profile</th></thead></table>
 			<table class="table">
@@ -120,76 +120,115 @@
 
 	<!-- Add User Modal -->
 	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-			  <input type="text" class="form-control mb-2" name="user" placeholder="Username" required autofocus id="userInput">
-			  <input type="password" class="form-control mb-2" name="password" placeholder="Password" required id="passwdInput">
-			  <input type="text" class="form-control mb-2" name="home" placeholder="/home/<username>" required autofocus id="homeInput">
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontAddUserBtn">Dismiss</button>
-	        <button type="button" class="btn btn-primary" id="addUserBtn">Add</button>
-	      </div>
-	    </div>
-	  </div>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control mb-2" name="user" placeholder="Username" required autofocus id="userInput">
+					<input type="password" class="form-control mb-2" name="password" placeholder="Password" required id="passwdInput">
+					<input type="text" class="form-control mb-2" name="home" placeholder="/home/<username>" required autofocus id="homeInput">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontAddUserBtn">Dismiss</button>
+						<button type="button" class="btn btn-primary" id="addUserBtn">Add</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<!-- Add Share Modal -->
+	<div class="modal fade" id="addShareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addUserModalLabel">Add Share</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control mb-2" name="name" placeholder="Sharename" required autofocus id="shareNameInput">
+					<select class="custom-select" id="sharePathSelect">
+						<option selected>Select path...</option>
+					</select>
+					<select class="custom-select" id="shareUserSelect">
+						<option selected>Select user...</option>
+					</select>
+					<select class="custom-select" id="shareUserPermSelect">
+						<option selected>Select permission...</option>
+						<option value="read">Read Only</option>
+						<option value="full">Read + Write</option>
+					</select>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="guestOkCheck">
+						<label class="form-check-label" for="defaultCheck1">
+							Allow Guest
+						</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontAddShareBtn">Dismiss</button>
+					<button type="button" class="btn btn-primary" id="addShareBtn">Add</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<!-- Delete User Modal -->
 	<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-		<select class="custom-select" id="deleteUserSelect">
-			<option selected>Select user...</option>
-		</select>
-		  </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontDelUserBtn">Dismiss</button>
-	        <button type="button" class="btn btn-primary" id="deleteUserBtn">Delete</button>
-	      </div>
-	    </div>
-	  </div>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<select class="custom-select" id="deleteUserSelect">
+						<option selected>Select user...</option>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontDelUserBtn">Dismiss</button>
+					<button type="button" class="btn btn-primary" id="deleteUserBtn">Delete</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<!-- Delete Share Modal -->
 	<div class="modal fade" id="deleteShareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="deleteModalLabel">Delete Share</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-		<select class="custom-select" id="deleteShareSelect">
-			<option selected>Select share...</option>
-		</select>
-		  </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontDelShareBtn">Dismiss</button>
-	        <button type="button" class="btn btn-primary" id="deleteShareBtn">Delete</button>
-	      </div>
-	    </div>
-	  </div>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Delete Share</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<select class="custom-select" id="deleteShareSelect">
+						<option selected>Select share...</option>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontDelShareBtn">Dismiss</button>
+					<button type="button" class="btn btn-primary" id="deleteShareBtn">Delete</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script>
 	function refresh_user_list(){
 		$('#users-table').html("<thead class='thead-dark'><tr><th>Name</th><th>Home</th><th>Groups</th></tr></thead>");
 		$('#deleteUserSelect').html('<option selected>Select user...</option>');
+		$('#shareUserSelect').html('<option selected>Select user...</option>');
 		var p1 = $.post('/api/user/list');
 		p1.done(function( data ) {
 			resp = JSON.parse(data);
@@ -200,6 +239,7 @@
 				"</td><td style='width: 33.33%;'>" +  user['Groups']+ "</td></tr>";
 				$('#users-table').append(info);
 				$('#deleteUserSelect').append('<option value="'+user['Name']+'">'+user['Name']+'</option>');
+				$('#shareUserSelect').append('<option value="'+user['Name']+'">'+user['Name']+'</option>');
 				//console.log(user);
 			});
 			$('#users-table').append("</tbody>");
@@ -224,6 +264,18 @@
 		});
 	}
 
+	function refresh_mount_list(){
+		var p = $.post('/api/mount/list');
+		$('#sharePathSelect').html('<option selected>Select path...</option>');
+		p.done(function( data ) {
+			resp = JSON.parse(data);
+			resp['HomeList'].forEach(function(path) {
+				$('#sharePathSelect').append('<option value="'+path+'">'+path+'</option>');
+			});
+			//console.log(resp);
+		});
+	}
+
 	$(function(){
 		$('#user-list-table').hide();
 		$('#share-list-table').hide();
@@ -242,6 +294,7 @@
 
 		refresh_user_list();
 		refresh_share_list();
+		refresh_mount_list();
 
 		$('#homeInput').focus(function(){
 			$('#homeInput').val("/home/"+$('#userInput').val());
@@ -260,6 +313,7 @@
 			$('#user-list-table').hide();
 			$('#share-list-table').hide();
 			$('#profile-table').hide();
+			$('#navbarToggleExternalContent').removeClass('show');
 		});
 
 		$("#users-btn").click(function() {
@@ -267,6 +321,7 @@
 			$('#user-list-table').show();
 			$('#share-list-table').hide();
 			$('#profile-table').hide();
+			$('#navbarToggleExternalContent').removeClass('show');
 		});
 
 		$("#shares-btn").click(function() {
@@ -274,6 +329,7 @@
 			$('#user-list-table').hide();
 			$('#share-list-table').show();
 			$('#profile-table').hide();
+			$('#navbarToggleExternalContent').removeClass('show');
 		});
 
 		$("#profile-btn").click(function() {
@@ -281,6 +337,7 @@
 			$('#user-list-table').hide();
 			$('#share-list-table').hide();
 			$('#profile-table').show();
+			$('#navbarToggleExternalContent').removeClass('show');
 		});
 
 		$('#addUserBtn').click(function(){
@@ -354,14 +411,68 @@
 			$('#deleteUserSelect').val("Select user...")
 		});
 
+		$('#addShareBtn').click(function(){
+			var name = $('#shareNameInput').val();
+			var path = $('#sharePathSelect').val();
+			var user = $('#shareUserSelect').val();
+			var perm = $('#shareUserPermSelect').val();
+
+			if (name == "" || path == "" || user == "" || perm == "")
+				return;
+
+			var args = {name: name, path: path, user: user, read: false, write: false, guest: false};
+			if (perm == "read") {
+				args['read'] = true;
+				args['write'] = false;
+			}
+			else if (perm == "full") {
+				args['read'] = true;
+				args['write'] = true;
+			}
+			args['guest'] = $('#guestOkCheck').is(':checked');
+
+			var p_add_share = $.post( '/api/share/add', JSON.stringify(args) );
+			p_add_share.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+					refresh_share_list();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+				$('#shareNameInput').val("");
+				$('#sharePathSelect').val("Select path...");
+				$('#shareUserSelect').val("Select user...");
+				$('#shareUserPermSelect').val("Select permission...");
+				$('#guestOkCheck').prop('checked', false);
+				$('#addShareModal').modal('hide');
+			});
+		});
+
+		$('#dontAddShareBtn').click(function(){
+			$('#guestOkCheck').prop('checked', false);
+			$('#shareNameInput').val("");
+			$('#sharePathSelect').val("Select path...");
+			$('#shareUserSelect').val("Select user...");
+			$('#shareUserPermSelect').val("Select permission...");
+		});
+
 		$('#deleteShareBtn').click(function(){
 			var name = $('#deleteShareSelect').val();
 
 			if (name == "")
 				return;
 
-			var p_del_user = $.post( '/api/share/delete', JSON.stringify({ name: name }) );
-			p_del_user.done(function( data ) {
+			var p_del_share = $.post( '/api/share/delete', JSON.stringify({ name: name }) );
+			p_del_share.done(function( data ) {
 				resp = JSON.parse(data);
 				$('.alert').html(resp['Status']);
 				if (resp['Status'].startsWith('Success')) {
