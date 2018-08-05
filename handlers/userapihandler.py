@@ -22,19 +22,20 @@ class UserApiHandler(BaseHandler):
         d = json.loads(self.request.body)
         user = d['user']
         passwd = d['password']
+        home = d['home']
 
         if self.application.user.exists(user):
-            status = "Error: user '{0}' exists".format(user)
+            status = "Error: user {0} exists".format(user)
         else:
-            if self.application.user.add(user, passwd, home="/home/{0}".format(user)):
-                status = "Success: User '{0}' added".format(user)
+            if self.application.user.add(user, passwd, home=home):
+                status = "Success: User {0} added".format(user)
             else:
-                status = "Error: User '{0}' add failed!".format(user)
-                resp = json.dumps({
-                    "Status": status,
-                })
-                print(resp)
-                self.write(resp)
+                status = "Error: User {0} add failed!".format(user)
+        resp = json.dumps({
+            "Status": status,
+        })
+        print(resp)
+        self.write(resp)
 
     def delete(self, route):
         d = json.loads(self.request.body)

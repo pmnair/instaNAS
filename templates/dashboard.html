@@ -113,6 +113,16 @@
 					<td>User Secret</td>
 					<td id="td_secret">{{secret}}</td>
 				</tr>
+				<tr>
+					<td>Hostname</td>
+					<td>
+						<input type="text" class="form-control mb-2" id="hostNameInput" placeholder="hostname" aria-describedby="sizing-addon1" required>
+						<button class="btn btn-success" id="updateHostname">Update</button>
+					</td>
+				</tr>
+				<tr>
+
+				</tr>
 			</table>
 		</div>
 		<div class="alert"></div>
@@ -199,6 +209,7 @@
 			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">OS</th><td>' + resp['OS'] + "</td></tr>");
 			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">CPU</th><td>' + resp['CPU'] + "</td></tr>");
 			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">Uptime</th><td>' + resp['Uptime'] + "</td></tr></tbody>");
+			$('#hostNameInput').val(resp['Hostname']);
 		});
 		var p1 = $.post('/api/user/list');
 		p1.done(function( data ) {
@@ -262,12 +273,35 @@
 		});
 
 		$('#addUserBtn').click(function(){
-			console.log($('#userInput').val());
-			console.log($('#passwdInput').val());
-			console.log($('#homeInput').val());
-			$('#userInput').val('');
-			$('#passwdInput').val('');
-			$('#homeInput').val('');
+			var name = $('#userInput').val();
+			var passwd = $('#passwdInput').val();
+			var home = $('#homeInput').val();
+
+			if (name == "" || passwd == "")
+				return;
+			if (home == "")
+				home = "/home/" + name;
+			var p_add_user = $.post( '/api/user/add', JSON.stringify({ user: name, password: passwd, home: home }) );
+			p_add_user.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+				$('#userInput').val('');
+				$('#passwdInput').val('');
+				$('#homeInput').val('');
+				$('#addUserModal').modal('hide');
+			});
 		});
 
 		$('#dontAddUserBtn').click(function(){
@@ -278,7 +312,6 @@
 
 		$('#deleteUserBtn').click(function(){
 			console.log($('#deleteUserSelect').val());
-			$('#deleteUserModal').modal('hide');
 		});
 
 		$('#dontDelUserBtn').click(function(){
