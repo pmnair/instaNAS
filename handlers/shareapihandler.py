@@ -21,7 +21,7 @@ class ShareApiHandler(BaseHandler):
         status = json.dumps({
             "Shares": shares,
             })
-        print(status)
+        #print(status)
         self.write(status)
 
     def add(self, route):
@@ -39,7 +39,7 @@ class ShareApiHandler(BaseHandler):
         resp = json.dumps({
             "Status": status,
             })
-        print(resp)
+        #print(resp)
         self.write(resp)
 
     def delete(self, route):
@@ -52,7 +52,7 @@ class ShareApiHandler(BaseHandler):
         resp = json.dumps({
             "Status": status,
             })
-        print(resp)
+        #print(resp)
         self.write(resp)
 
     def get(self, route):

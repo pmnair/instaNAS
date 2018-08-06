@@ -56,7 +56,7 @@ class Application(tornado.web.Application):
         self.user = User()
         self.share = Share()
         self.mount = Mount()
-        self.drives = Drives()
+        self.drives = Drives(self.mount)
 
 if __name__ == "__main__":
     server = tornado.httpserver.HTTPServer(Application())

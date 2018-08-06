@@ -12,14 +12,28 @@ from basehandler import BaseHandler
 
 class SysApiHandler(BaseHandler):
     def info(self, route):
+        self.application.sys.refresh()
         status = json.dumps({
             "Hostname": self.application.sys.hostname,
             "OS": self.application.sys.os_info(),
             "CPU": self.application.sys.cpu(),
             "Uptime": self.application.sys.uptime(),
             })
-        print(status)
+        #print(status)
         self.write(status)
+
+    def hostname_set(self, route):
+        d = json.loads(self.request.body)
+        name = d['name']
+        if self.application.sys.change_hostname(self.application.sys.hostname, name):
+            status = "Success: new hostname is {0}".format(name)
+        else:
+            status = "Error: hostname change failed!"
+        resp = json.dumps({
+            "Status": status,
+            })
+        #print(resp)
+        self.write(resp)
 
     def get(self, route):
         self.redirect('/index')

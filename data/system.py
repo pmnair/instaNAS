@@ -9,6 +9,9 @@ import subprocess
 
 class System(object):
     def __init__(s):
+        s.refresh()
+
+    def refresh(s):
         r=subprocess.check_output("lscpu", stderr=subprocess.STDOUT, shell=False)
         t1=r.strip('\n').split('\n')
         s.cpu_info = {}
@@ -36,3 +39,13 @@ class System(object):
 
     def cpu(s):
         return s.cpu_info['Model name'] + " " + s.cpu_info['CPU(s)'] + " Core(s)"
+
+    def change_hostname(s, old, new):
+        try:
+            r=subprocess.check_output(["sed", "-i", "s/{0}/{1}/g".format(old, new), "/etc/hosts"], stderr=subprocess.STDOUT, shell=False)
+            os.system("echo {0} > /etc/hostname".format(new))
+            r=subprocess.check_output(["hostname", new], stderr=subprocess.STDOUT, shell=False)
+            return True
+        except subprocess.CalledProcessError as e:
+            print(e)
+            return False

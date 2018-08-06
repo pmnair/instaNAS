@@ -68,7 +68,7 @@
 				</svg>
 			</button>
 			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#ejectDriveModal">
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#unmountDriveModal">
 				<svg width="24" height="24" viewBox="0 0 24 24">
 				    <path fill="none" d="M0 24V0h24v24H0z"/>
 				    <path d="M5 17h14v2H5zm7-12L5.33 15h13.34z"/>
@@ -236,6 +236,29 @@
 		</div>
 	</div>
 
+	<!-- UnMount Drive Modal -->
+	<div class="modal fade" id="unmountDriveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addUserModalLabel">UnMount Drive</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<select class="custom-select" id="unmountDriveSelect">
+						<option selected>Select drive...</option>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontUnmountDriveBtn">Dismiss</button>
+					<button type="button" class="btn btn-primary" id="unmountDriveBtn">Unmount</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Delete User Modal -->
 	<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -325,6 +348,7 @@
 		var p = $.post('/api/drive/list');
 		$('#drives-table').html("<thead class='thead-dark'><tr style='background-color: lightgrey;'><th>Model</th><th>Serial</th><th>Label</th><th>FileSystem</th><th>Path</th><th>Device</th></tr></thead>");
 		$('#mountDriveSelect').html('<option selected>Select drive...</option>');
+		$('#unmountDriveSelect').html('<option selected>Select drive...</option>');
 		p.done(function( data ) {
 			resp = JSON.parse(data);
 			console.log(resp);
@@ -335,14 +359,16 @@
 						var info = "<tr><td>" + drive['Model'] + "</td><td>" + drive['Serial'] + "</td><td>" +
 						part['Label'] + "</td><td>" + part['FileSystem'] + "</td><td>" + part['MountPath'] + "</td><td>" + part['Path'] + "</td></tr>";
 						$('#drives-table').append(info);
-						$('#mountDriveSelect').append('<option value="'+part['Path']+'" data-id="'+drive['Model']+"_"+drive['Serial']+'">'+drive['Model']+" "+part['Label']+" ("+drive['Serial']+')</option>');
+						$('#mountDriveSelect').append('<option value="'+part['Path']+'" data-id="'+part['Label']+"_"+drive['Model']+'">'+drive['Model']+" "+part['Label']+" ("+drive['Serial']+')</option>');
+						$('#unmountDriveSelect').append('<option value="'+part['Path']+'">'+drive['Model']+" "+part['Label']+" ("+drive['Serial']+')</option>');
 					});
 				}
 				else {
 					var info = "<tr><td>" + drive['Model'] + "</td><td>" + drive['Serial'] + "</td><td>" +
 					drive['Label'] + "</td><td>" + drive['FileSystem'] + "</td><td>" + drive['MountPath'] + "</td><td>" + drive['Path'] + "</td></tr>";
 					$('#drives-table').append(info);
-					$('#mountDriveSelect').append('<option value="'+drive['Path']+'" data-id="'+drive['Model']+"_"+drive['Serial']+'">'+drive['Model']+" "+drive['Label']+" ("+drive['Serial']+')</option>');
+					$('#mountDriveSelect').append('<option value="'+drive['Path']+'" data-id="'+drive['Label']+"_"+drive['Model']+'">'+drive['Model']+" "+drive['Label']+" ("+drive['Serial']+')</option>');
+					$('#unmountDriveSelect').append('<option value="'+drive['Path']+'">'+drive['Model']+" "+drive['Label']+" ("+drive['Serial']+')</option>');
 				}
 			});
 			$('#drives-table').append("</tbody>");
@@ -357,16 +383,14 @@
 			resp['HomeList'].forEach(function(path) {
 				$('#sharePathSelect').append('<option value="'+path+'">'+path+'</option>');
 			});
+			resp['MountList'].forEach(function(path) {
+				$('#sharePathSelect').append('<option value="'+path+'">'+path+'</option>');
+			});
 			//console.log(resp);
 		});
 	}
 
-	$(function(){
-		$('#user-list-table').hide();
-		$('#share-list-table').hide();
-		$('#profile-table').hide();
-		$('.alert').hide();
-
+	function refresh_sys_info(){
 		var p = $.post('/api/sys/info');
 		p.done(function( data ) {
 			resp = JSON.parse(data);
@@ -376,7 +400,15 @@
 			$('#sysinfo-table').append('<tr><th scope="row" style="text-align: center; width: 40%;">Uptime</th><td>' + resp['Uptime'] + "</td></tr></tbody>");
 			$('#hostNameInput').val(resp['Hostname']);
 		});
+	}
 
+	$(function(){
+		$('#user-list-table').hide();
+		$('#share-list-table').hide();
+		$('#profile-table').hide();
+		$('.alert').hide();
+
+		refresh_sys_info();
 		refresh_user_list();
 		refresh_share_list();
 		refresh_mount_list();
@@ -387,14 +419,23 @@
 		});
 
 		$('#refreshUserList').click(function(){
+			$('.alert').hide();
 			refresh_user_list();
 		});
 
 		$('#refreshShareList').click(function(){
+			$('.alert').hide();
 			refresh_share_list();
 		});
 
+		$('#refreshDriveList').click(function(){
+			$('.alert').hide();
+			refresh_drive_list();
+			refresh_mount_list();
+		});
+
 		$("#home-btn").click(function() {
+			$('.alert').hide();
 			$('#system-info-table').show();
 			$('#user-list-table').hide();
 			$('#drive-list-table').hide();
@@ -404,6 +445,7 @@
 		});
 
 		$("#users-btn").click(function() {
+			$('.alert').hide();
 			$('#system-info-table').hide();
 			$('#user-list-table').show();
 			$('#drive-list-table').hide();
@@ -413,6 +455,7 @@
 		});
 
 		$("#drives-btn").click(function() {
+			$('.alert').hide();
 			$('#system-info-table').hide();
 			$('#user-list-table').hide();
 			$('#drive-list-table').show();
@@ -422,6 +465,7 @@
 		});
 
 		$("#shares-btn").click(function() {
+			$('.alert').hide();
 			$('#system-info-table').hide();
 			$('#user-list-table').hide();
 			$('#drive-list-table').hide();
@@ -431,6 +475,7 @@
 		});
 
 		$("#profile-btn").click(function() {
+			$('.alert').hide();
 			$('#system-info-table').hide();
 			$('#user-list-table').hide();
 			$('#drive-list-table').hide();
@@ -597,7 +642,7 @@
 		});
 
 		$('#mountDriveSelect').change(function(){
-			$('#mountPathInput').val("/media/exports/"+$('#mountDriveSelect').find(':selected').data('id'));
+			$('#mountPathInput').val("/mnt/"+$('#mountDriveSelect').find(':selected').data('id'));
 		});
 
 		$('#mountDriveBtn').click(function(){
@@ -617,6 +662,7 @@
 					$('.alert').addClass('alert-success');
 					$('.alert').show();
 					refresh_drive_list();
+					refresh_mount_list();
 				}
 				else{
 					$('.alert').removeClass('alert-danger');
@@ -624,13 +670,68 @@
 					$('.alert').addClass('alert-warning');
 					$('.alert').show();
 				}
-				$('#mountDriveSelect').val("Select share...")
+				$('#mountDriveSelect').val("Select drive...")
 				$('#mountDriveModal').modal('hide');
 			});
 		});
 
-		$('#dontDelShareBtn').click(function(){
-			$('#deleteShareSelect').val("Select share...")
+		$('#dontMountDriveBtn').click(function(){
+			$('#mountDriveSelect').val("Select drive...")
+		});
+
+		$('#unmountDriveBtn').click(function(){
+			var device = $('#unmountDriveSelect').val();
+
+			if (device == "")
+				return;
+
+			var p_mnt_drv = $.post( '/api/drive/unmount', JSON.stringify({ device: device }) );
+			p_mnt_drv.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+					refresh_drive_list();
+					refresh_mount_list();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+				$('#unmountDriveSelect').val("Select drive...")
+				$('#unmountDriveModal').modal('hide');
+			});
+		});
+
+		$('#dontUnmountDriveBtn').click(function(){
+			$('#unmountDriveSelect').val("Select drive...")
+		});
+
+		$('#updateHostname').click(function() {
+			var name = $('#hostNameInput').val();
+			var p_hostname = $.post( '/api/sys/hostname/set', JSON.stringify({ name: name }) );
+			p_hostname.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+					refresh_sys_info();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+			});
 		});
 
 		$("#update_passwd").click(function() {

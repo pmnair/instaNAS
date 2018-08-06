@@ -15,7 +15,7 @@ class UserApiHandler(BaseHandler):
         status = json.dumps({
             "Users": self.application.user.list(),
         })
-        print(status)
+        #print(status)
         self.write(status)
 
     def add(self, route):
@@ -34,7 +34,7 @@ class UserApiHandler(BaseHandler):
         resp = json.dumps({
             "Status": status,
         })
-        print(resp)
+        #print(resp)
         self.write(resp)
 
     def delete(self, route):
@@ -51,7 +51,7 @@ class UserApiHandler(BaseHandler):
         resp = json.dumps({
             "Status": status,
         })
-        print(resp)
+        #print(resp)
         self.write(resp)
 
     def update(self, route):
@@ -66,11 +66,11 @@ class UserApiHandler(BaseHandler):
                 status = "Success: User '{0}' updated".format(user)
             else:
                 status = "Error: User '{0}' update failed!".format(user)
-                resp = json.dumps({
-                    "Status": status,
-                })
-                print(resp)
-                self.write(resp)
+        resp = json.dumps({
+            "Status": status,
+        })
+        #print(resp)
+        self.write(resp)
 
     def get(self, route):
         self.redirect('/index')

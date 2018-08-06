@@ -10,12 +10,38 @@ import json
 
 from basehandler import BaseHandler
 
-class MountApiHandler(BaseHandler):
+class DriveApiHandler(BaseHandler):
+    def mount(self, route):
+        d = json.loads(self.request.body)
+        dev = d['device']
+        path = d['path']
+        if self.application.drives.mount(dev, path):
+            status = "Success: Drive mounted!"
+        else:
+            status = "Success: Drive mount failed!"
+        resp = json.dumps({
+            "Status": status,
+            })
+        #print(resp)
+        self.write(resp)
+
+    def unmount(self, route):
+        d = json.loads(self.request.body)
+        dev = d['device']
+
+        if self.application.drives.unmount(dev):
+            status = "Success: Drive unmounted!"
+        else:
+            status = "Error: Drive unmount failed!"
+        resp = json.dumps({
+            "Status": status,
+            })
+        #print(resp)
+        self.write(resp)
+
     def list(self, route):
-        self.application.mount.refresh()
         status = json.dumps({
-            "HomeList": self.application.mount.homes,
-            "MountList": [m['Path'] for m in self.application.mount.mounts if "/mnt/" in m['Path']],
+            "Drives": self.application.drives.list(),
             })
         #print(status)
         self.write(status)
