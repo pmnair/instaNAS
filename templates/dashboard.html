@@ -16,6 +16,7 @@
 				<h4 class="text-white">Menu</h4>
 				<button type="button" class="btn btn-info" id="home-btn">Home</button>
 				<button type="button" class="btn btn-info" id="users-btn">Users</button>
+				<button type="button" class="btn btn-info" id="drives-btn">Drives</button>
 				<button type="button" class="btn btn-info" id="shares-btn">Shares</button>
 				<button type="button" class="btn btn-info" id="profile-btn">Profile</button>
 				<a class="btn btn-info" href="logout" role="button">Sign Out</a>
@@ -41,14 +42,43 @@
 			</table>
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addUserModal">
-			<svg height="32" class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path></svg>
+			<svg height="32" class="octicon octicon-diff-added" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M13 1H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1zm0 13H1V2h12v12zM6 9H3V7h3V4h2v3h3v2H8v3H6V9z"></path></svg>
 			</button>
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteUserModal">
-			<svg height="32" class="octicon octicon-dash" viewBox="0 0 8 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M0 7v2h8V7H0z"></path></svg>
+			<svg height="32" class="octicon octicon-diff-removed" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M13 1H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1zm0 13H1V2h12v12zm-2-5H3V7h8v2z"></path></svg>
 			</button>
 			<button type="button" class="btn btn-light" data-toggle="modal" id="refreshUserList">
-			<svg height="32" class="octicon octicon-sync" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M10.24 7.4a4.15 4.15 0 0 1-1.2 3.6 4.346 4.346 0 0 1-5.41.54L4.8 10.4.5 9.8l.6 4.2 1.31-1.26c2.36 1.74 5.7 1.57 7.84-.54a5.876 5.876 0 0 0 1.74-4.46l-1.75-.34zM2.96 5a4.346 4.346 0 0 1 5.41-.54L7.2 5.6l4.3.6-.6-4.2-1.31 1.26c-2.36-1.74-5.7-1.57-7.85.54C.5 5.03-.06 6.65.01 8.26l1.75.35A4.17 4.17 0 0 1 2.96 5z"></path></svg>
+				<svg width="24" height="24" viewBox="0 0 24 24">
+				    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+				    <path d="M0 0h24v24H0z" fill="none"/>
+				</svg>
+			</button>
+		</div>
+		<div id="drive-list-table" style="display: none;">
+			<!-- Table -->
+			<table class="table" style><thead class="thead-light"><th scope="row" style="text-align: center;">Drives</th></thead></table>
+			<table class="table table-striped" id="drives-table">
+			</table>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#mountDriveModal">
+				<svg width="24" height="24" viewBox="0 0 24 24">
+				    <path d="M0 0h24v24H0z" fill="none"/>
+				    <path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>
+				</svg>
+			</button>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#ejectDriveModal">
+				<svg width="24" height="24" viewBox="0 0 24 24">
+				    <path fill="none" d="M0 24V0h24v24H0z"/>
+				    <path d="M5 17h14v2H5zm7-12L5.33 15h13.34z"/>
+				</svg>
+			</button>
+			<button type="button" class="btn btn-light" data-toggle="modal" id="refreshDriveList">
+				<svg width="24" height="24" viewBox="0 0 24 24">
+				    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+				    <path d="M0 0h24v24H0z" fill="none"/>
+				</svg>
 			</button>
 		</div>
 		<div id="share-list-table" style="display: none;">
@@ -58,14 +88,17 @@
 			</table>
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addShareModal">
-			<svg height="32" class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path></svg>
+			<svg height="32" class="octicon octicon-diff-added" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M13 1H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1zm0 13H1V2h12v12zM6 9H3V7h3V4h2v3h3v2H8v3H6V9z"></path></svg>
 			</button>
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteShareModal">
-			<svg height="32" class="octicon octicon-dash" viewBox="0 0 8 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M0 7v2h8V7H0z"></path></svg>
+			<svg height="32" class="octicon octicon-diff-removed" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M13 1H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1zm0 13H1V2h12v12zm-2-5H3V7h8v2z"></path></svg>
 			</button>
 			<button type="button" class="btn btn-light" data-toggle="modal" id="refreshShareList">
-			<svg height="32" class="octicon octicon-sync" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M10.24 7.4a4.15 4.15 0 0 1-1.2 3.6 4.346 4.346 0 0 1-5.41.54L4.8 10.4.5 9.8l.6 4.2 1.31-1.26c2.36 1.74 5.7 1.57 7.84-.54a5.876 5.876 0 0 0 1.74-4.46l-1.75-.34zM2.96 5a4.346 4.346 0 0 1 5.41-.54L7.2 5.6l4.3.6-.6-4.2-1.31 1.26c-2.36-1.74-5.7-1.57-7.85.54C.5 5.03-.06 6.65.01 8.26l1.75.35A4.17 4.17 0 0 1 2.96 5z"></path></svg>
+				<svg width="24" height="24" viewBox="0 0 24 24">
+				    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+				    <path d="M0 0h24v24H0z" fill="none"/>
+				</svg>
 			</button>
 		</div>
 		<div id="profile-table" style="display: none;">
@@ -179,6 +212,30 @@
 		</div>
 	</div>
 
+	<!-- Mount Drive Modal -->
+	<div class="modal fade" id="mountDriveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addUserModalLabel">Mount Drive</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<select class="custom-select" id="mountDriveSelect">
+						<option selected>Select drive...</option>
+					</select>
+					<input type="text" class="form-control mb-2" name="path" placeholder="Mountpath" required autofocus id="mountPathInput" disabled>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontMountDriveBtn">Dismiss</button>
+					<button type="button" class="btn btn-primary" id="mountDriveBtn">Mount</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Delete User Modal -->
 	<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -264,6 +321,34 @@
 		});
 	}
 
+	function refresh_drive_list(){
+		var p = $.post('/api/drive/list');
+		$('#drives-table').html("<thead class='thead-dark'><tr style='background-color: lightgrey;'><th>Model</th><th>Serial</th><th>Label</th><th>FileSystem</th><th>Path</th><th>Device</th></tr></thead>");
+		$('#mountDriveSelect').html('<option selected>Select drive...</option>');
+		p.done(function( data ) {
+			resp = JSON.parse(data);
+			console.log(resp);
+			$('#drives-table').append("<tbody>");
+			resp['Drives'].forEach(function(drive) {
+				if (drive['Partitions'].length > 0) {
+					drive['Partitions'].forEach(function(part) {
+						var info = "<tr><td>" + drive['Model'] + "</td><td>" + drive['Serial'] + "</td><td>" +
+						part['Label'] + "</td><td>" + part['FileSystem'] + "</td><td>" + part['MountPath'] + "</td><td>" + part['Path'] + "</td></tr>";
+						$('#drives-table').append(info);
+						$('#mountDriveSelect').append('<option value="'+part['Path']+'" data-id="'+drive['Model']+"_"+drive['Serial']+'">'+drive['Model']+" "+part['Label']+" ("+drive['Serial']+')</option>');
+					});
+				}
+				else {
+					var info = "<tr><td>" + drive['Model'] + "</td><td>" + drive['Serial'] + "</td><td>" +
+					drive['Label'] + "</td><td>" + drive['FileSystem'] + "</td><td>" + drive['MountPath'] + "</td><td>" + drive['Path'] + "</td></tr>";
+					$('#drives-table').append(info);
+					$('#mountDriveSelect').append('<option value="'+drive['Path']+'" data-id="'+drive['Model']+"_"+drive['Serial']+'">'+drive['Model']+" "+drive['Label']+" ("+drive['Serial']+')</option>');
+				}
+			});
+			$('#drives-table').append("</tbody>");
+		});
+	}
+
 	function refresh_mount_list(){
 		var p = $.post('/api/mount/list');
 		$('#sharePathSelect').html('<option selected>Select path...</option>');
@@ -295,6 +380,7 @@
 		refresh_user_list();
 		refresh_share_list();
 		refresh_mount_list();
+		refresh_drive_list();
 
 		$('#homeInput').focus(function(){
 			$('#homeInput').val("/home/"+$('#userInput').val());
@@ -311,6 +397,7 @@
 		$("#home-btn").click(function() {
 			$('#system-info-table').show();
 			$('#user-list-table').hide();
+			$('#drive-list-table').hide();
 			$('#share-list-table').hide();
 			$('#profile-table').hide();
 			$('#navbarToggleExternalContent').removeClass('show');
@@ -319,6 +406,16 @@
 		$("#users-btn").click(function() {
 			$('#system-info-table').hide();
 			$('#user-list-table').show();
+			$('#drive-list-table').hide();
+			$('#share-list-table').hide();
+			$('#profile-table').hide();
+			$('#navbarToggleExternalContent').removeClass('show');
+		});
+
+		$("#drives-btn").click(function() {
+			$('#system-info-table').hide();
+			$('#user-list-table').hide();
+			$('#drive-list-table').show();
 			$('#share-list-table').hide();
 			$('#profile-table').hide();
 			$('#navbarToggleExternalContent').removeClass('show');
@@ -327,6 +424,7 @@
 		$("#shares-btn").click(function() {
 			$('#system-info-table').hide();
 			$('#user-list-table').hide();
+			$('#drive-list-table').hide();
 			$('#share-list-table').show();
 			$('#profile-table').hide();
 			$('#navbarToggleExternalContent').removeClass('show');
@@ -335,6 +433,7 @@
 		$("#profile-btn").click(function() {
 			$('#system-info-table').hide();
 			$('#user-list-table').hide();
+			$('#drive-list-table').hide();
 			$('#share-list-table').hide();
 			$('#profile-table').show();
 			$('#navbarToggleExternalContent').removeClass('show');
@@ -490,6 +589,43 @@
 				}
 				$('#deleteShareSelect').val("Select share...")
 				$('#deleteShareModal').modal('hide');
+			});
+		});
+
+		$('#dontDelShareBtn').click(function(){
+			$('#deleteShareSelect').val("Select share...")
+		});
+
+		$('#mountDriveSelect').change(function(){
+			$('#mountPathInput').val("/media/exports/"+$('#mountDriveSelect').find(':selected').data('id'));
+		});
+
+		$('#mountDriveBtn').click(function(){
+			var device = $('#mountDriveSelect').val();
+			var path = $('#mountPathInput').val();
+
+			if (device == "" || path == "")
+				return;
+
+			var p_mnt_drv = $.post( '/api/drive/mount', JSON.stringify({ device: device, path: path }) );
+			p_mnt_drv.done(function( data ) {
+				resp = JSON.parse(data);
+				$('.alert').html(resp['Status']);
+				if (resp['Status'].startsWith('Success')) {
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-warning');
+					$('.alert').addClass('alert-success');
+					$('.alert').show();
+					refresh_drive_list();
+				}
+				else{
+					$('.alert').removeClass('alert-danger');
+					$('.alert').removeClass('alert-success');
+					$('.alert').addClass('alert-warning');
+					$('.alert').show();
+				}
+				$('#mountDriveSelect').val("Select share...")
+				$('#mountDriveModal').modal('hide');
 			});
 		});
 
