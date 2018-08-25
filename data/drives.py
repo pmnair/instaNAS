@@ -35,6 +35,9 @@ class Drives(object):
         for d in s.udev.list_devices(subsystem='block', DEVTYPE='disk'):
             if 'ID_TYPE' not in d or d.get('ID_TYPE') != 'disk':
                 continue
+            if s.mnt.dev_contains_rootfs(d.device_node):
+                continue
+
             drv = {'FileSystem': 'None', 'Model': 'Unknown',
                     'Serial': 'Unknown', 'Label': '',
                     'MountPath': 'None'}

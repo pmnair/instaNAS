@@ -42,3 +42,9 @@ class Mount(object):
     def is_dir_mounted(s, d):
         r = [m for m in s.mounts if m['Path'] == d]
         return (len(r) > 0)
+
+    def dev_contains_rootfs(s, d):
+        r = [m['Path'] for m in s.mounts if d in m['Device']]
+        if '/' in r:
+            return True
+        return False
